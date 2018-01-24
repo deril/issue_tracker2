@@ -1,3 +1,4 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :tickets, only: %i[show create update destroy]
+  get 'tickets(/pages/:page)', to: 'tickets#index', defaults: { page: 1 }
 end

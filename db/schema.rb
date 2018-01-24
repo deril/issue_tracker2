@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180124185013) do
+ActiveRecord::Schema.define(version: 20180124191930) do
 
   create_table "tickets", force: :cascade do |t|
     t.string "subject"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20180124185013) do
     t.string "status", default: "PENDING"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_tickets_on_created_at"
   end
 
 end
