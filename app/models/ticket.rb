@@ -2,7 +2,7 @@
 
 class Ticket < ApplicationRecord
   STATUSES = [
-    PENDING = 'PNDING',
+    PENDING = 'PENDING',
     IN_PROGRESS = 'IN PROGRESS',
     RESOLVED = 'RESOLVED'
   ].freeze
