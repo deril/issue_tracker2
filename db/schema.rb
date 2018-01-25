@@ -10,15 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180124191930) do
+ActiveRecord::Schema.define(version: 20180125102148) do
+
+  create_table "people", force: :cascade do |t|
+    t.string "provider", default: "email", null: false
+    t.string "uid", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "name"
+    t.string "nickname"
+    t.string "image"
+    t.string "email"
+    t.text "tokens"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "type"
+    t.index ["email"], name: "index_people_on_email", unique: true
+    t.index ["uid", "provider"], name: "index_people_on_uid_and_provider", unique: true
+  end
 
   create_table "tickets", force: :cascade do |t|
     t.string "subject"
     t.text "body"
-    t.string "status", default: "PENDING"
+    t.string "status", default: "PENDING", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "manager_id"
     t.index ["created_at"], name: "index_tickets_on_created_at"
+    t.index ["manager_id"], name: "index_tickets_on_manager_id"
+    t.index ["user_id"], name: "index_tickets_on_user_id"
   end
 
 end

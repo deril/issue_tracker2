@@ -1,8 +1,11 @@
 class TicketsController < ApplicationController
   respond_to :xml, :json
+  before_action :authenticate_person!
+  before_action :authorize_ticket, only: %i[show update destroy]
 
   def index
-    @tickets = Ticket.paginated(page: params[:page])
+    @tickets = policy_scope(Ticket).paginated(page: params[:page])
+    authorize @tickets
     respond_with @tickets
   end
 
@@ -11,7 +14,8 @@ class TicketsController < ApplicationController
   end
 
   def create
-    @ticket = Ticket.new(tickets_params)
+    @ticket = current_person.tickets.new(tickets_params)
+    authorize ticket
     ticket.save
     respond_with ticket
   end
@@ -29,10 +33,16 @@ class TicketsController < ApplicationController
   private
 
   def ticket
-    @ticket ||= Ticket.find(params[:id])
+    @ticket ||= policy_scope(Ticket).find(params[:id])
   end
 
   def tickets_params
-    params.require(:ticket).permit(:subject, :body)
+    allowed_user_attributes = %i[subject body]
+    allowed_manager_attributes = allowed_user_attributes + %i[status, manager_id]
+    params.require(:ticket).permit(current_person.is_a?(Manager) ? allowed_manager_attributes : allowed_user_attributes)
+  end
+
+  def authorize_ticket
+    authorize ticket
   end
 end
