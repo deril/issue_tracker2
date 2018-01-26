@@ -1,24 +1,8 @@
-# README
+# Issue Tracker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Getting started
+To solve all dependencies run
+```./bin/setup```
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## External dependencies
+You need to install sqlite3 to be able to start the application
