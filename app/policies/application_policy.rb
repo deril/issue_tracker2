@@ -18,20 +18,12 @@ class ApplicationPolicy
     false
   end
 
-  def new?
-    create?
-  end
-
   def update?
-    true
-  end
-
-  def edit?
-    update?
+    scope.where(:id => record.id).exists?
   end
 
   def destroy?
-    true
+    scope.where(:id => record.id).exists?
   end
 
   def scope

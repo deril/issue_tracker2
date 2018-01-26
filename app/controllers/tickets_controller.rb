@@ -14,14 +14,14 @@ class TicketsController < ApplicationController
   end
 
   def create
-    @ticket = current_person.tickets.new(tickets_params)
+    @ticket = current_person.tickets.new(permitted_attributes(Ticket))
     authorize ticket
     ticket.save
     respond_with ticket
   end
 
   def update
-    ticket.update(tickets_params)
+    ticket.update(permitted_attributes(ticket))
     respond_with ticket
   end
 
@@ -33,13 +33,7 @@ class TicketsController < ApplicationController
   private
 
   def ticket
-    @ticket ||= policy_scope(Ticket).find(params[:id])
-  end
-
-  def tickets_params
-    allowed_user_attributes = %i[subject body]
-    allowed_manager_attributes = allowed_user_attributes + %i[status, manager_id]
-    params.require(:ticket).permit(current_person.is_a?(Manager) ? allowed_manager_attributes : allowed_user_attributes)
+    @ticket ||= Ticket.find(params[:id])
   end
 
   def authorize_ticket

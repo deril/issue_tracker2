@@ -27,9 +27,13 @@ describe 'User Tickets Management', type: :request do
   end
 
   it 'cannot see other tickets' do
-    # expect do
-    #   get "/tickets/#{ticket2.id}", params: { format: :json }
-    # end.to raise_error(Pundit::NotAuthorizedError)
+    sign_in user
+    get "/tickets/#{ticket2.id}", params: { format: :json }
+    expect(response).to be_success
+
+    json = JSON.parse(response.body)
+
+    expect(json['errors']).to include 'You are not authorized to perform this action'
   end
 
   it 'can create ticets' do
@@ -59,10 +63,13 @@ describe 'User Tickets Management', type: :request do
 
     expect(json['subject']).to eq 'Subject changed'
 
-    expect do
-      sign_in user
-      put "/tickets/#{ticket2.id}", params: { ticket: { subject: 'Subject changed' }, format: :json }
-    end.to raise_error(ActiveRecord::RecordNotFound)
+    sign_in user
+    put "/tickets/#{ticket2.id}", params: { ticket: { subject: 'Subject changed' }, format: :json }
+    expect(response).to be_success
+
+    json = JSON.parse(response.body)
+
+    expect(json['errors']).to include 'You are not authorized to perform this action'
   end
 
   it 'cannot update status and manager' do

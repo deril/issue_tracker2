@@ -11,8 +11,8 @@ class ApplicationController < ActionController::API
   end
 
   def person_not_authorized(exception)
-    policy_name = exception.policy.class.to_s.underscore
+    message = {errors: 'You are not authorized to perform this action'}
 
-    respond_with policy_name
+    render request.format.to_sym => message
   end
 end
